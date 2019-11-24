@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:5.7
+    restart: on-failure
+    container_name: blog-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=blog
+      - MYSQL_DATABASE=blog
+
+  app:
+    image: ambientum/php:7.2-nginx
+    restart: on-failure
+    container_name: blog-app
+    volumes:
+      - .:/var/www/app
+    ports:
+      # - "host/container"
+      - "8084:8080"
+    depends_on:
+      - mysql
+    links:
+      - mysql
